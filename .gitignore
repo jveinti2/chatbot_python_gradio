@@ -1,0 +1,28 @@
+# Entorno virtual
+venv/
+*.egg-info/
+
+# Archivos de configuración de entorno
+.env
+*.env
+
+# Archivos de Python
+__pycache__/
+*.py[cod]
+
+# Archivos de sistema
+.DS_Store  # macOS
+Thumbs.db  # Windows
+
+# Archivos de log
+*.log
+
+# Archivos de configuración de IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de salida de construcción
+build/
+dist/
