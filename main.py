@@ -1,22 +1,28 @@
 import os
-import openai
+from dotenv import load_dotenv
+from openai import OpenAI
 import gradio as gr
+load_dotenv()
 
-OPEN_AI_KEY = os.getenv("OPEN_AI_KEY")
 
-openai.api_key =  OPEN_AI_KEY
+client = OpenAI(
+    api_key = os.getenv("OPEN_AI_KEY"),
+)
 
-def chat_with_gpt(promt):
-    response = openai.chat.completions.create(
-        messages=[{"role": "user", "content": promt}],
-        model="gpt-3.5-turbo",
-    )
+def chat_with_gpt(prompt):
     
-    return response['choices'][0]['message']['content']
+    completion = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ]
+    )
 
+    return completion.choices[0].message.content
+    
 
-
-#Gradio interface
+# Gradio interface
 iface = gr.Interface(
     fn=chat_with_gpt,
     inputs=gr.Textbox(placeholder="Type your message here..."),
@@ -26,17 +32,4 @@ iface = gr.Interface(
 )
 
 if __name__ == "__main__":
-    iface.launch()
-
-
-# Is not requiered beacouse the chat interaction is with gradio interface
-# if __name__ == "__main__":
-#     while True:
-#         user_input = input("You: ")
-#         if user_input.lower() in ["exit", "quit", "bye", "adios", "chao" , "salir", "cerrar"]:
-#             print("Bot: Goodbye!")
-#             break
-#         response = chat_with_gpt(user_input)
-#         print(f"Bot: {response}")
-    
-    
+    iface.launch(share=True)  # Share the link publicly if desired
